@@ -1,85 +1,60 @@
-**To-Do-suunnitelma: Dokumentaation automatisointi Docusauruksella ja CI/CD:llä**
+**To-Do-suunnitelma: Dokumentaation automatisointi Cookiecutterilla, Docusauruksella ja CI/CD:llä**
 
-1.  **Valmistelut ja Projektin Alustus**
-    *   [ ] Varmista Python-projektin valmiusaste dokumentointia varten.
-    *   [ ] Luo projektin juureen `docs/`-kansio dokumentaatiotiedostoille.
-    *   [ ] Kirjoita ensimmäiset Markdown (.md) -dokumentit (esim. `index.md`, `installation.md`, `api_reference.md`).
-        *   [ ] Harkitse API-dokumentaation (esim. `api_reference.md`) automaattista generointia työkaluilla kuten `pdoc` tai `Sphinx` ja sen muuntamista Markdown-muotoon.
+**0. Projektipohjan (Cookiecutter Template) Suunnittelu ja Toteutus**
+    *   [ ] Määrittele tarvittavat tiedostot ja kansiorakenne templateen:
+        *   [ ] `.gitignore`
+        *   [ ] `Dockerfile` (tarvittaessa)
+        *   [ ] `README.md` (perusrunko)
+        *   [ ] Docusaurus-perusrakenne (esim. `docs/` tai `docs-site/` sisältäen `docusaurus.config.js`, `sidebars.js`, esimerkkisivut `docs/intro.md`)
+        *   [ ] `windsurf_config.yaml` (tai vastaava Windsurf-integraatiota varten, jos sovellettavissa)
+        *   [ ] `.github/workflows/` -kansio valmiilla CI/CD-pohjalla (esim. `deploy-docs.yml`)
+    *   [ ] Luo Cookiecutter-template, joka generoi yllä määritellyn projektirakenteen.
+    *   [ ] Määrittele Cookiecutter-templatessa muuttujat (esim. `project_name`, `project_slug`, `author_name`, `description`, `github_username`, `github_repository_name`).
+    *   [ ] Testaa Cookiecutter-templaten toimivuus luomalla sillä uusi esimerkkiprojekti.
 
-2.  **Docusauruksen Käyttöönotto**
-    *   [ ] Asenna Docusaurus: `npx create-docusaurus@latest docs-site classic` (tai valitsemasi nimi `docs-site`:n tilalle).
-    *   [ ] Siirry Docusaurus-projektin kansioon: `cd docs-site`.
-    *   [ ] Korvaa Docusauruksen oletusdokumentit omilla Markdown-tiedostoillasi (`docs/`-kansiosta).
-    *   [ ] Konfiguroi Docusaurus (`docusaurus.config.js`):
-        *   [ ] Määritä sivuston nimi (`title`), tagline, organisaation/käyttäjän nimi (`organizationName`), projektin nimi (`projectName`).
-        *   [ ] **TÄRKEÄÄ GitHub Pagesia varten:** Aseta `baseUrl` vastaamaan projektin nimeä, jos julkaiset projektisivuna (esim. `/projektin-nimi/`). Jos käytät custom domainia tai juurta, tämä voi olla `/`.
+**1. Uuden Dokumentaatioprojektin Alustus Cookiecutter-templatella**
+    *   [ ] Varmista, että Cookiecutter on asennettu (`pip install cookiecutter`).
+    *   [ ] Käytä luotua Cookiecutter-templatea uuden dokumentaatioprojektin luomiseen: `cookiecutter path/to/your/cookiecutter-template` (tai URL GitHubiin, jos template on siellä).
+    *   [ ] Vastaa Cookiecutterin esittämiin kysymyksiin (projektin nimi, kuvaus jne.).
+    *   [ ] Varmista, että generoitu projektirakenne on oikea ja vastaa odotuksia.
+    *   [ ] Siirry generoituun projektikansioon: `cd <projektin-nimi>`.
+    *   [ ] Alusta Git-repositorio generoidussa projektikansiossa (ellei template tee sitä automaattisesti): `git init`.
+
+**2. Docusauruksen Konfigurointi ja Sisällön Luonti (Generoidussa Projektissa)**
+    *   [ ] Siirry Docusaurus-projektin kansioon (esim. `cd docs-site` tai `cd docs` riippuen templaten rakenteesta).
+    *   [ ] Asenna Docusaurus-riippuvuudet (jos template ei tee tätä osana jotain skriptiä): `npm install` (tai `npm ci` jos `package-lock.json` on olemassa ja halutaan tarkka asennus).
+    *   [ ] Täydennä/muokkaa Docusauruksen dokumentteja (`.md`-tiedostot `docs/`-kansiossa) projektikohtaisella sisällöllä.
+        *   [ ] `index.md` (tai vastaava aloitussivu)
+        *   [ ] `installation.md`
+        *   [ ] `api_reference.md` (harkitse automaattista generointia)
+    *   [ ] Tarkista ja päivitä Docusauruksen konfiguraatio (`docusaurus.config.js`):
+        *   [ ] Varmista sivuston nimi (`title`), tagline, `organizationName`, `projectName` (nämä voivat tulla osittain Cookiecutter-muuttujista).
+        *   [ ] **TÄRKEÄÄ GitHub Pagesia varten:** Aseta `baseUrl` oikein (esim. `/projektin-nimi/` tai `/` jos käytössä custom domain tai käyttäjäsivu).
         *   [ ] Määritä `url` (esim. `https://kayttajanimi.github.io`).
-    *   [ ] Muokkaa sivupalkin navigaatiota (`sidebars.js` tai vastaava) vastaamaan dokumentaatiosi rakennetta.
+    *   [ ] Muokkaa tarvittaessa sivupalkin navigaatiota (`sidebars.js`).
     *   [ ] Testaa Docusaurus-sivustoa paikallisesti: `npm run start`.
 
-3.  **Integrointi Python-projektiin ja Versionhallinta**
-    *   [ ] Päätä, sijoitetaanko Docusaurus-projekti (`docs-site/`) Python-projektin alikansioon vai pidetäänkö se erillisenä (yleensä alikansio on kätevämpi).
-    *   [ ] Lisää kaikki projektitiedostot (Python-koodi, Docusaurus-sivusto) Git-versionhallintaan.
-    *   [ ] Tee commit: `git add .` ja `git commit -m "Lisätty Docusaurus-dokumentaatiosivusto"`.
-    *   [ ] Työnnä muutokset GitHub-repositorioosi.
+**3. API-Dokumentaation ja Muun Sisällön Integrointi**
+    *   [ ] Jos projektissa on API, suunnittele ja toteuta sen dokumentointi.
+    *   [ ] Harkitse API-dokumentaation automaattista generointia työkaluilla kuten `pdoc` (Pythonille), `Sphinx`, tai vastaavilla ja sen muuntamista/integrointia Markdown-muotoon Docusaurusta varten.
+    *   [ ] Lisää muu tarvittava dokumentaatio (käyttöohjeet, tutoriaalit, konseptit).
 
-4.  **CI/CD-putken Määrittely (GitHub Actions)**
-    *   [ ] Luo `.github/workflows/`-kansio projektisi juureen (ellei sitä jo ole).
-    *   [ ] Luo uusi YAML-tiedosto workflow'lle, esim. `deploy-docs.yml`.
-    *   [ ] Määrittele workflow:
-        *   [ ] Triggeröinti: `on: push: branches: [ main ]` (tai mikä päähaarasi onkaan).
-        *   [ ] Työ (`job`), esim. `build-and-deploy`:
-            *   [ ] `runs-on: ubuntu-latest`.
-            *   [ ] `actions/checkout@v3` (tai uudempi) koodin noutamiseksi.
-            *   [ ] `actions/setup-node@v3` (tai uudempi) Node.js:n asentamiseksi (määritä sopiva Node-versio, esim. `18`).
-            *   [ ] Asenna Docusaurus-riippuvuudet: `cd docs-site && npm install`.
-            *   [ ] Rakenna Docusaurus-sivusto: `cd docs-site && npm run build`.
-            *   [ ] Julkaise GitHub Pagesiin käyttäen `peaceiris/actions-gh-pages@v3` (tai vastaavaa actionia):
-                *   [ ] Anna `github_token: ${{ secrets.GITHUB_TOKEN }}`.
-                *   [ ] Määritä `publish_dir: ./docs-site/build` (tai Docusauruksen build-kansion polku).
-                *   [ ] (Valinnainen) Jos julkaiset tiettyyn haaraan (esim. `gh-pages`), määritä se.
+**4. Versionhallinta ja GitHub**
+    *   [ ] Varmista, että kaikki tarvittavat tiedostot on lisätty Gitiin (Cookiecutterin luoma `.gitignore` auttaa tässä).
+    *   [ ] Tee commit: `git add .` ja `git commit -m "Alustettu dokumentaatioprojekti Cookiecutter-templatella ja lisätty perussisältö"`.
+    *   [ ] Luo GitHub-repositorio projektille (esim. `gh repo create <repositoryn-nimi> --public --source=. --remote=origin --push` jos et ole vielä tehnyt ja olet projektin juurihakemistossa).
+    *   [ ] Työnnä muutokset GitHub-repositorioosi (jos et tehnyt sitä `gh repo create` -komennon yhteydessä): `git push -u origin main` (tai mikä päähaarasi onkaan).
 
-5.  **GitHub Pages -julkaisun Varmistaminen**
-    *   [ ] Varmista, että GitHub-repositoriosi asetuksissa Pages on konfiguroitu käyttämään oikeaa haaraa (yleensä `gh-pages` tai `main`-haaran `/docs`-kansio, riippuen workflow'sta). Docusaurus CI/CD yleensä hoitaa tämän `gh-pages`-haaran kautta.
-    *   [ ] Huomioi olemassa oleva portfoliosivusi (`https://kayttajanimi.github.io/`). Projektidokumentaatio tulee olemaan osoitteessa `https://kayttajanimi.github.io/projektin-nimi/`. Varmista, että `docusaurus.config.js`-tiedoston `baseUrl` on oikein (`/projektin-nimi/`).
-
-6.  **Testaus ja Käyttöönotto**
-    *   [ ] Tee push `main`-haaraan käynnistääksesi GitHub Actions workflow'n.
-    *   [ ] Seuraa workflow'n suoritusta GitHubin "Actions"-välilehdeltä.
-    *   [ ] Kun workflow on onnistuneesti suoritettu, tarkista julkaistu dokumentaatiosivusto verkossa.
-    *   [ ] Varmista, että kaikki linkit toimivat ja sivusto näyttää odotetulta.
-
-7.  **Ylläpito ja Kehitys**
-    *   [ ] Jatkossa aina kun päivität dokumentaatiota (`.md`-tiedostoja) tai koodia (jos se vaikuttaa dokumentaatioon), tee commit ja push. CI/CD-putki hoitaa päivityksen automaattisesti.
-    *   [ ] Harkitse lisäominaisuuksia Docusaurukseen, kuten hakutoiminto (esim. Algolia), versiointi, tai kustomoidut teemat.
-
-8.  **Kehitysideat ja Parannusehdotukset (Vaikuttavuuden mukaan järjestettynä)**
-
-    **Korkea Vaikutus / Suhteellisen Matala Vaiva:**
-    *   [ ] **Automatisoi API-dokumentaation generointi CI/CD-putkessa:**
-        *   Varmistaa, että API-dokumentaatio on aina ajan tasalla koodin kanssa.
-        *   Esim. `pdoc` tai `Sphinx` ajetaan osana GitHub Actions workflow'ta ennen Docusauruksen buildia.
-    *   [ ] **Automatisoitu linkkien tarkistus CI/CD-putkessa:**
-        *   Estää rikkinäiset linkit ja parantaa dokumentaation laatua.
-        *   Esim. `lychee-action` GitHub Actionsille.
-    *   [ ] **Docusaurus: Hyödynnä automaattista sivupalkin generointia:**
-        *   Vähentää manuaalista `sidebars.js`-tiedoston ylläpitoa, jos kansiorakenne on looginen (`autogenerate` sidebars.js-tiedostossa).
-
-    **Merkittävä Vaikutus / Keskitasoinen Vaiva:**
-    *   [ ] **Docusaurus: Integroi Algolia DocSearch (tai vastaava) parempaa hakua varten:**
-        *   Parantaa merkittävästi dokumentaation käytettävyyttä ja löydettävyyttä (ilmainen avoimen lähdekoodin projekteille).
-    *   [ ] **Docusaurus: Ota käyttöön dokumentaation versiointi:**
-        *   Erityisen tärkeää, jos projektista julkaistaan eri versioita (esim. kirjastot, työkalut).
-        *   CI/CD voi auttaa uusien versioiden luomisessa ja julkaisussa.
-    *   [ ] **Automatisoitu koodiesimerkkien testaus/validointi CI/CD-putkessa:**
-        *   Varmistaa, että dokumentaation koodiesimerkit toimivat ja ovat ajan tasalla.
-
-    **Korkea Vaikutus / Suurempi Vaiva tai Erityistarpeet:**
-    *   [ ] **Docusaurus: Hyödynnä MDX:ää interaktiivisten komponenttien luomiseen:**
-        *   Mahdollistaa dynaamisemman ja osallistavamman dokumentaation (esim. interaktiiviset demot, koodieditorit).
-    *   [ ] **Docusaurus: Edistynyt teeman kustomointi ja brändäys:**
-        *   Luo uniikin ja projektin brändiin sopivan ulkoasun.
-    *   [ ] **Integroi sivustoanalytiikka (esim. Google Analytics, Plausible):**
-        *   Auttaa ymmärtämään, miten dokumentaatiota käytetään ja missä on parannettavaa.
-    *   [ ] **Panosta saavutettavuuteen (Accessibility):**
-        *   Varmista, että dokumentaatio on käytettävissä kaikille käyttäjille noudattamalla saavutettavuusperiaatteita.
+**5. CI/CD-putken (GitHub Actions) Viimeistely ja Testaus**
+    *   [ ] Tarkista ja viimeistele Cookiecutterin generoima CI/CD-workflow-tiedosto (`.github/workflows/deploy-docs.yml` tai vastaava).
+    *   [ ] Varmista, että workflow:
+        *   [ ] Triggeröityy oikein (esim. `on: push: branches: [ main ]`).
+        *   [ ] Käyttää `ubuntu-latest` (tai sopivaa ajastinta).
+        *   [ ] Noutaa koodin: `actions/checkout@v4`.
+        *   [ ] Asentaa Node.js: `actions/setup-node@v4` (määritä sopiva Node-versio, esim. `18` tai `20`).
+        *   [ ] Asentaa Docusaurus-riippuvuudet Docusaurus-kansiossa: `npm ci` (suositeltu `npm install`:in sijaan CI:ssä).
+        *   [ ] Rakentaa Docusaurus-sivuston Docusaurus-kansiossa: `npm run build`.
+        *   [ ] Julkaisee rakennetun sivuston GitHub Pagesiin käyttäen esim. `peaceiris/actions-gh-pages@v3` tai uudempaa:
+            *   [ ] Määritä `github_token: ${{ secrets.GITHUB_TOKEN }}`.
+            *   [ ] Määritä `publish_dir: ./docs-site/build` (tai Docusauruksen build-kansion polku suhteessa repositorion juureen).
+    *   [ ] Testaa CI/CD-putki tekemällä pieni muutos dokumentaatioon ja työntämällä se päähaaraan. Varmista, että GitHub Pages -sivusto päivittyy.
